@@ -1,0 +1,117 @@
+import javax.swing.*; import java.awt.*; import java.awt.event.*;
+public class tictactoe extends JFrame {
+private static final String TITEL="Tic Tac Toe"; private static final int WEITE=450;
+private static final int HOEHE=450;
+private Container content;
+private JLabel ergebnis;
+private JButton[] kasten;
+private JButton endKnopf;
+private JButton startKnopf;
+private KastenKnopfHandler[] kastenHandlers; private EndKnopfHandler endHandler;
+private StartKnopfHandler startHandler; private int unentschieden=1;
+private boolean kreis; private boolean spielVorbei;
+public tictactoe() {
+//benötigten Code initzialisieren setTitle(TITEL);
+setSize(WEITE, HOEHE); setDefaultCloseOperation(EXIT_ON_CLOSE);
+//get Inhaltskasten content=getContentPane(); content.setBackground(Color.red.darker());
+//Layout setzen
+content.setLayout(new GridLayout(4,3));
+//Kästen und Handler erschaffen
+kasten=new JButton[9];
+kastenHandlers=new KastenKnopfHandler[9]; for(int i=0; i<9; i++)
+{
+}
+char ch=(char)('0'+i+1);
+kasten[i]=new JButton(""+ch); kastenHandlers[i]=new KastenKnopfHandler(); kasten[i].addActionListener(kastenHandlers[i]);
+//start und end Knöpfe erschaffen endKnopf=new JButton("Ende"); endHandler=new EndKnopfHandler(); endKnopf.addActionListener(endHandler); startKnopf=new JButton("Neu"); startHandler=new StartKnopfHandler(); startKnopf.addActionListener(startHandler);
+//ergebnis Feld erschaffen
+ergebnis=new JLabel("Kreis", SwingConstants.CENTER); ergebnis.setForeground(Color.white);
+//Elemente zum Spielgitter hinzufügen for(int i=0; i<9; i++)
+{
+}
+content.add(kasten[i]); //kasten[i].setBackground(Color.black); //kasten[i].setForeground(Color.white);
+content.add(startKnopf); //startKnopf.setBackground(Color.black); //startKnopf.setForeground(Color.white); content.add(ergebnis); content.add(endKnopf); //endKnopf.setBackground(Color.black); //endKnopf.setForeground(Color.white);
+//Initialisiere start();
+}
+public void start() {
+//Boolvariablen einen Wert zuweisen kreis=true;
+spielVorbei=false;
+unentschieden=1;
+//Text in den Knopfen erschaffen for(int i=0; i<9; i++)
+{
+char ch=(char)('0'+i+1); kasten[i].setText(""+ch);
+}
+//Ergebnis Feld Text setzen ergebnis.setText("Kreis am Zug");
+setVisible(true);
+}
+public boolean siegerTest() {
+//Überprüfen ob jemand gewonnen hat
+if(kasten[0].getText().equals(kasten[1].getText()) && kasten[1].getText().equals(kasten[2].getText())) {
+return true; }
+else if(kasten[3].getText().equals(kasten[4].getText()) && kasten[4].getText().equals(kasten[5].getText())) {
+return true; }
+else if(kasten[6].getText().equals(kasten[7].getText()) && kasten[7].getText().equals(kasten[8].getText())) {
+return true; }
+else if(kasten[0].getText().equals(kasten[3].getText()) && kasten[3].getText().equals(kasten[6].getText())) {
+return true; }
+else if(kasten[1].getText().equals(kasten[4].getText()) && kasten[4].getText().equals(kasten[7].getText())) {
+return true; }
+else if(kasten[2].getText().equals(kasten[5].getText()) && kasten[5].getText().equals(kasten[8].getText())) {
+return true; }
+else if(kasten[0].getText().equals(kasten[4].getText()) && kasten[4].getText().equals(kasten[8].getText())) {
+return true; }
+else if(kasten[2].getText().equals(kasten[4].getText()) && kasten[4].getText().equals(kasten[6].getText())) {
+return true; }
+else {
+return false; }
+}
+public static void main(String[] args) {
+//tictactoe Obejkt erstellen tictactoe gui=new tictactoe();
+}
+private class KastenKnopfHandler implements ActionListener {
+public void actionPerformed(ActionEvent e) {
+//Wenn das Spiel vorbei ist: hier enden. if(spielV orbei)
+{
+} }
+} else {
+unentschieden++;
+//Spielerwechsel kreis=!kreis;
+return; }
+//get welcher Knopf wurde gedrückt JButton pressed=(JButton)(e.getSource());
+//get Text im Knopf
+String text=pressed.getText();
+//wenn O oder X, dann hier enden if(text.equals("O") || text.equals("X")) {
+return; }
+//O oder X in das Textfeld eingeben, je nachdem welcher Spieler dran war if(kreis)
+{
+} else {
+}
+pressed.setText("O");
+pressed.setText("X");
+//Überprüfen ob jemand nach letzter Aktion gewonnen hat if(siegerTest())
+{
+if (!kreis)
+else if (kreis) {
+ergebnis.setText("Kreis hat gewonnen!"); }
+//Spiel ist vorbei spielVorbei=true;
+//Siegertext im Feld ausgeben {
+}
+if (unentschieden == 10 && spielVorbei==false) {
+ergebnis.setText("Unentschieden!");
+spielVorbei=true; }
+//ausgeben welcher Spieler dran ist else if(kreis)
+{
+} else {
+} }
+ergebnis.setText("Kreis am Zug");
+ergebnis.setText("Kreuz am Zug");
+private class EndKnopfHandler implements ActionListener {
+public void actionPerformed(ActionEvent e) {
+System.exit(0);
+} }
+private class StartKnopfHandler implements ActionListener {
+public void actionPerformed(ActionEvent e) {
+start();
+ergebnis.setText("Kreuz hat gewonnen!");
+}
+} }
